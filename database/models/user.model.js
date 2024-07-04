@@ -16,5 +16,9 @@ const userSchema = new Schema({
   otp: {
     type: String,
   },
+  confirmEmail: {
+    type: Boolean,
+    default: false,
+  },
 });
 export const User = model("User", userSchema);
