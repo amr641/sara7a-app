@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const signUp = catchError(async (req, res) => {
   const user = await User.insertMany(req.body);
   //   user.password = undefined;
-  res.status(201).json({ message: "success" });
+  res.status(201).json({ message: "success", user });
 });
 const confirmEmail = catchError(async (req, res) => {
   jwt.verify(req.params.token, "route", async (err, decoded) => {
