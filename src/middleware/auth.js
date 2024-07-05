@@ -11,19 +11,28 @@ const checkEmail = async (req, res, next) => {
   if (emailExistence)
     return next(new appError("email already exist please sign in", 409));
   req.body.password = bcrypt.hashSync(req.body.password, 8);
-  req.body.otp = Math.floor(Math.random() * 1000000000).toString();
+  req.body.otp = Math.floor(Math.random() * 1000000).toString();
   sendEmail(req.body.email, req.body.otp);
   next();
 };
 const logIn = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
+
   if (!user || !bcrypt.compareSync(req.body.password, user.password))
     return next(new appError("incorrect email or password", 401));
+
   jwt.sign(
-    { userId: user.id, name: user.userName },
+    { userId: user.id, name: user.userName, confirmEmail: user.confirmEmail },
     "route",
     (error, token) => {
-      res.status(200).json({ message: "logged in", token });
+      return user.confirmEmail
+        ? res.status(200).json({ message: "logged in", token })
+        : res.status(200).json({
+            message: "logged in",
+            emailConfirmation:
+              "you have to confirm your email to access our services",
+            token,
+          });
     }
   );
 };

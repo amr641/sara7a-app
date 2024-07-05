@@ -16,6 +16,10 @@ const userSchema = new Schema({
   otp: {
     type: String,
   },
+  otpExpireDate: {
+    type: Date,
+    default: new Date().setMinutes(new Date().getMinutes() + 5),
+  },
   confirmEmail: {
     type: Boolean,
     default: false,

@@ -9,4 +9,8 @@ const loginVal = joi.object({
   email: joi.string().email().required(),
   password: joi.string().required(),
 });
-export { signUpVal, loginVal };
+const otpVal = joi.object({
+  email: joi.string().email().required(),
+  otp: joi.string().min(5).max(6),
+});
+export { signUpVal, loginVal, otpVal };
